@@ -10,26 +10,44 @@ const tweets = [
     { username: 'Bob Esponja', tweet: "hehehehehehe" },
     { username: 'Goku', tweet: "" },
     { username: 'Detona ralph e Vanellope', tweet: "Vencemos uma corrida hoje" },
-    { username: '', tweet: "" },
+    { username: 'Detona ralph e Vanellope', tweet: "2" },
     { username: 'Cinderala', tweet: "Onde esta o meu sapato o deus" },
-    { username: 'Bob Esponja', tweet: "" },
-    { username: '', tweet: "" },
+    { username: 'Bob Esponja', tweet: "b" },
+    { username: 'Cinderela', tweet: "bom" },
     { username: 'Goku', tweet: "Oi eu sou o goku" },
-    { username: 'Cinderala', tweet: "" },
-    { username: '', tweet: "" }
+    { username: 'Cinderala', tweet: "aaaaaaa" },
+    { username: 'Bob Esponja', tweet: "ola" },
 ]
+
 const app = express()
 app.use(cors())
+app.use(express.json())
+
+app.post("/sign-up", (req, res) => {
+    const { username, avatar } = req.body
+    const newUser = { username, avatar }
+    users.push(newUser)
+    res.send("OK")
+})
+
+app.post("/tweets", (req, res) => {
+    const { username, tweet } = req.body
+    const newTweet = { username, tweet }
+    tweets.push(newTweet)
+    res.send("OK")
+})
 
 app.get("/tweets", (req, res) => {
     const toSend = []
-    tweets.forEach((t)=>{
-        users.forEach((u)=>{
-            if(u.username === t.username){
-                toSend.push({username:u.username, avatar:u.avatar, tweet:t.tweet})
+    for (let i = tweets.length - 1; i >= tweets.length - 10; i--) {
+        let t = tweets[i]
+        users.forEach((u) => {
+            if (u.username === t.username) {
+                toSend.push({ username: u.username, avatar: u.avatar, tweet: t.tweet })
             }
         })
-    })
+    }
+
     res.send(toSend)
 })
 
